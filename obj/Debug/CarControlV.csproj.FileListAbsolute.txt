@@ -1,0 +1,9 @@
+C:\Users\Chris-No Internet\Downloads\repos\repos\repos\GTAV_CorrectProjectType\CarControlV\bin\Debug\CarControlV.dll
+C:\Users\Chris-No Internet\Downloads\repos\repos\repos\GTAV_CorrectProjectType\CarControlV\bin\Debug\CarControlV.pdb
+C:\Users\Chris-No Internet\Downloads\repos\repos\repos\GTAV_CorrectProjectType\CarControlV\bin\Debug\ScriptHookVDotNet3.dll
+C:\Users\Chris-No Internet\Downloads\repos\repos\repos\GTAV_CorrectProjectType\CarControlV\obj\Debug\CarControlV.csproj.AssemblyReference.cache
+C:\Users\Chris-No Internet\Downloads\repos\repos\repos\GTAV_CorrectProjectType\CarControlV\obj\Debug\CarControlV.csproj.CoreCompileInputs.cache
+C:\Users\Chris-No Internet\Downloads\repos\repos\repos\GTAV_CorrectProjectType\CarControlV\obj\Debug\CarContr.E25EC6C2.Up2Date
+C:\Users\Chris-No Internet\Downloads\repos\repos\repos\GTAV_CorrectProjectType\CarControlV\obj\Debug\CarControlV.dll
+C:\Users\Chris-No Internet\Downloads\repos\repos\repos\GTAV_CorrectProjectType\CarControlV\obj\Debug\CarControlV.pdb
+C:\Users\Chris-No Internet\Downloads\repos\repos\repos\GTAV_CorrectProjectType\CarControlV\bin\Debug\NAudio.dll
