@@ -7,3 +7,10 @@ C:\Users\Chris-No Internet\Downloads\repos\repos\repos\GTAV_CorrectProjectType\C
 C:\Users\Chris-No Internet\Downloads\repos\repos\repos\GTAV_CorrectProjectType\CarControlV\obj\Debug\CarControlV.dll
 C:\Users\Chris-No Internet\Downloads\repos\repos\repos\GTAV_CorrectProjectType\CarControlV\obj\Debug\CarControlV.pdb
 C:\Users\Chris-No Internet\Downloads\repos\repos\repos\GTAV_CorrectProjectType\CarControlV\bin\Debug\NAudio.dll
+C:\Users\clope\OneDrive\Documents\GTA V Modding\repos\repos\GTAV_CorrectProjectType\CarControlV\bin\Debug\CarControlV.dll
+C:\Users\clope\OneDrive\Documents\GTA V Modding\repos\repos\GTAV_CorrectProjectType\CarControlV\bin\Debug\CarControlV.pdb
+C:\Users\clope\OneDrive\Documents\GTA V Modding\repos\repos\GTAV_CorrectProjectType\CarControlV\obj\Debug\CarControlV.csproj.AssemblyReference.cache
+C:\Users\clope\OneDrive\Documents\GTA V Modding\repos\repos\GTAV_CorrectProjectType\CarControlV\obj\Debug\CarControlV.csproj.CoreCompileInputs.cache
+C:\Users\clope\OneDrive\Documents\GTA V Modding\repos\repos\GTAV_CorrectProjectType\CarControlV\obj\Debug\CarContr.E25EC6C2.Up2Date
+C:\Users\clope\OneDrive\Documents\GTA V Modding\repos\repos\GTAV_CorrectProjectType\CarControlV\obj\Debug\CarControlV.dll
+C:\Users\clope\OneDrive\Documents\GTA V Modding\repos\repos\GTAV_CorrectProjectType\CarControlV\obj\Debug\CarControlV.pdb

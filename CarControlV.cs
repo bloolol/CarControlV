@@ -136,6 +136,8 @@ public class CarHud : Script
     private bool IsSeatbeltSoundsEnabled = true;
     public CarHud()
     {
+        if (Game.IsPaused)
+            return;
         //Car Hud
         this.Tick += new EventHandler(this.OnTick);
         this.KeyUp += new KeyEventHandler(this.OnKeyUp);
@@ -154,7 +156,7 @@ public class CarHud : Script
         this.Tick += new EventHandler(this.Seatbelt);
         //Engine Control 
         this.Tick += new EventHandler(this.EngineAnimation);
-       // this.Tick += new EventHandler(this.EngineShutOff);
+        this.Tick += new EventHandler(this.EngineShutOff);
     }
 
     private void LoadConfig()
@@ -506,23 +508,32 @@ public class CarHud : Script
                 windowToggleAnim(Game.Player.Character);
             }
             else if (this.IsPointInRect(x, y, rectX1 + this.buttonSize + this.buttonSpacing, rectY4, this.buttonSize, this.buttonSize) && Game.Player.Character.SeatIndex == VehicleSeat.Driver)
+            {
                 this.ToggleDoor(0);
+                doorToggleAnim(Game.Player.Character);
+            }
             else if (this.IsPointInRect(x, y, rectX1 + (float)(2.0 * ((double)this.buttonSize + (double)this.buttonSpacing)), rectY4, this.buttonSize, this.buttonSize) && Game.Player.Character.SeatIndex == VehicleSeat.Passenger)
                 this.SwitchSeat2();
             else if (this.IsPointInRect(x, y, rectX1 + (float)(3.0 * ((double)this.buttonSize + (double)this.buttonSpacing)), rectY4, this.buttonSize, this.buttonSize) && Game.Player.Character.SeatIndex == VehicleSeat.Driver)
                 this.SwitchSeat2();
             else if (this.IsPointInRect(x, y, rectX1 + (float)(4.0 * ((double)this.buttonSize + (double)this.buttonSpacing)), rectY4, this.buttonSize, this.buttonSize) && Game.Player.Character.SeatIndex == VehicleSeat.Passenger)
                 this.ToggleDoor(1);
-            else if (this.IsPointInRect(x, y, rectX1 + (float)(5.0 * ((double)this.buttonSize + (double)this.buttonSpacing)), rectY4, this.buttonSize, this.buttonSize) && Game.Player.Character.SeatIndex == VehicleSeat.Passenger)
+            else if (this.IsPointInRect(x, y, rectX1 + (float)(5.0 * ((double)this.buttonSize + (double)this.buttonSpacing)), rectY4, this.buttonSize, this.buttonSize) && (Game.Player.Character.SeatIndex == VehicleSeat.Passenger || Game.Player.Character.SeatIndex == VehicleSeat.Driver))
             {
                 this.ToggleWindow(1);
-                windowToggleAnimPassengerSide(Game.Player.Character);
+                if (Game.Player.Character.SeatIndex == VehicleSeat.Passenger)
+                    windowToggleAnimPassengerSide(Game.Player.Character);
+                else
+                    windowToggleAnim(Game.Player.Character);
             }
             float rectY5 = rectY4 + this.buttonSize + this.buttonSpacing;
-            if (this.IsPointInRect(x, y, rectX1, rectY5, this.buttonSize, this.buttonSize) && Game.Player.Character.SeatIndex == VehicleSeat.RightRear)
+            if (this.IsPointInRect(x, y, rectX1, rectY5, this.buttonSize, this.buttonSize) && (Game.Player.Character.SeatIndex == VehicleSeat.RightRear || Game.Player.Character.SeatIndex == VehicleSeat.Driver))
             {
                 this.ToggleWindow(2);
+                if (Game.Player.Character.SeatIndex == VehicleSeat.RightRear)
                 windowToggleAnimPassengerSide(Game.Player.Character);
+                else
+                    windowToggleAnim(Game.Player.Character);
             }
             else if (this.IsPointInRect(x, y, rectX1 + this.buttonSize + this.buttonSpacing, rectY5, this.buttonSize, this.buttonSize) && Game.Player.Character.SeatIndex == VehicleSeat.RightRear)
                 this.ToggleDoor(2);
@@ -532,9 +543,10 @@ public class CarHud : Script
                 this.SwitchSeat2();
             else if (this.IsPointInRect(x, y, rectX1 + (float)(4.0 * ((double)this.buttonSize + (double)this.buttonSpacing)), rectY5, this.buttonSize, this.buttonSize) && Game.Player.Character.SeatIndex == VehicleSeat.LeftRear)
                 this.ToggleDoor(3);
-            else if (this.IsPointInRect(x, y, rectX1 + (float)(5.0 * ((double)this.buttonSize + (double)this.buttonSpacing)), rectY5, this.buttonSize, this.buttonSize) && Game.Player.Character.SeatIndex == VehicleSeat.LeftRear)
+            else if (this.IsPointInRect(x, y, rectX1 + (float)(5.0 * ((double)this.buttonSize + (double)this.buttonSpacing)), rectY5, this.buttonSize, this.buttonSize) && (Game.Player.Character.SeatIndex == VehicleSeat.LeftRear || Game.Player.Character.SeatIndex == VehicleSeat.Driver))
             {
                 this.ToggleWindow(3);
+
                 windowToggleAnim(Game.Player.Character);
             }
 
@@ -575,6 +587,8 @@ public class CarHud : Script
 
         if (Function.Call<bool>(Hash.GET_IS_VEHICLE_ENGINE_RUNNING, (InputArgument)(Entity)Game.Player.Character.CurrentVehicle))
         {
+            Function.Call(Hash.DISABLE_CONTROL_ACTION, (InputArgument)0, (InputArgument)75, (InputArgument)true);
+            Game.DisableControlThisFrame(GTA.Control.VehicleExit);
             /*
             Function.Call(Hash.SET_VEHICLE_ENGINE_ON, (InputArgument)(Entity)Game.Player.Character.CurrentVehicle, (InputArgument)false, (InputArgument)false, (InputArgument)true);
             Game.Player.Character.CurrentVehicle.IsEngineRunning = false;
@@ -602,6 +616,8 @@ public class CarHud : Script
         }
         else
         {
+            Function.Call(Hash.DISABLE_CONTROL_ACTION, (InputArgument)0, (InputArgument)75, (InputArgument)true);
+            Game.DisableControlThisFrame(GTA.Control.VehicleExit);
             /*
             Function.Call(Hash.SET_VEHICLE_UNDRIVEABLE, (InputArgument)(Entity)this.vehicle, (InputArgument)false);
             Function.Call(Hash.SET_VEHICLE_ENGINE_ON, (InputArgument)(Entity)Game.Player.Character.CurrentVehicle, (InputArgument)true, (InputArgument)false, (InputArgument)false);
@@ -980,6 +996,72 @@ public class CarHud : Script
         (InputArgument) false
             });
     }
+    //Door Animation Segment
+    private void doorToggleAnim(Ped ped)
+    {
+        if (Function.Call<bool>(Hash.IS_VEHICLE_DOOR_FULLY_OPEN, vehicle, 0))
+        {
+            if (!Function.Call<bool>(Hash.IS_ENTITY_PLAYING_ANIM, new InputArgument[4]
+            {
+        (InputArgument) ped,
+        (InputArgument) "anim@veh@std@ps@enter_exit",
+        (InputArgument) "door_dside_open",
+        (InputArgument) 3
+            }))
+                ped.Task.PlayAnimation(this.windowAnimDict, this.windowAnimName, this.windowAnimSpeed, -1, AnimationFlags.UpperBodyOnly | AnimationFlags.AllowRotation);
+            else if ((double)Function.Call<float>(Hash.GET_ENTITY_ANIM_CURRENT_TIME, new InputArgument[3]
+            {
+        (InputArgument) ped,
+        (InputArgument) "anim@veh@std@ps@enter_exit",
+        (InputArgument) "door_dside_open"
+            }) > (double)this.windowAnimStopPoint)
+            {
+                Function.Call(Hash.STOP_ENTITY_ANIM, new InputArgument[4]
+                {
+          (InputArgument) ped,
+          (InputArgument) "anim@veh@std@ps@enter_exit",
+          (InputArgument) "door_dside_open",
+          (InputArgument) 3f
+                });
+
+            }
+        }
+        else if ((!Function.Call<bool>(Hash.IS_VEHICLE_DOOR_FULLY_OPEN, vehicle, 0)))
+        {
+            if (!Function.Call<bool>(Hash.IS_ENTITY_PLAYING_ANIM, new InputArgument[4]
+                {
+        (InputArgument) ped,
+        (InputArgument) "anim@veh@std@ps@enter_exit",
+        (InputArgument) "door_dside_opem",
+        (InputArgument) 3
+                }))
+                ped.Task.PlayAnimation(this.windowAnimDict, this.windowAnimName, this.windowAnimSpeed, -1, AnimationFlags.UpperBodyOnly | AnimationFlags.AllowRotation);
+            else if ((double)Function.Call<float>(Hash.GET_ENTITY_ANIM_CURRENT_TIME, new InputArgument[3]
+            {
+        (InputArgument) ped,
+        (InputArgument) "anim@veh@std@ps@enter_exit",
+        (InputArgument) "door_dside_open"
+            }) > (double)this.windowAnimStopPoint)
+            {
+                Function.Call(Hash.STOP_ENTITY_ANIM, new InputArgument[4]
+                {
+          (InputArgument) ped,
+          (InputArgument) "anim@veh@std@ps@enter_exit",
+          (InputArgument) "door_dside_open",
+          (InputArgument) 3f
+                });
+
+            }
+
+
+
+
+
+        }
+    }
+
+
+
     // Window Animation Segment
     private void windowToggleAnim(Ped ped)
     {
@@ -1086,6 +1168,38 @@ public class CarHud : Script
 
     }
 
+    private void EngineShutOff2(object sender, EventArgs e)
+    {
+
+        if (Game.IsEnabledControlJustReleased(VehicleExitControl))
+        {
+            if (Game.Player.Character.IsInVehicle())
+            {
+
+                if (Game.Player.Character.SeatIndex == VehicleSeat.Driver)
+                {
+                    Vehicle vehicle = Game.Player.Character.CurrentVehicle;
+
+
+                    //backwards logic but it works lol
+                    if ((IsSubttaskActive(Game.Player.Character, Subtask.EXITING_VEHICLE_OPENING_DOOR_EXITING) || (IsSubttaskActive(Game.Player.Character, Subtask.EXITING_VEHICLE))) && toggledEnginefromMenu)
+                    {
+                        vehicle.IsEngineRunning = true;
+
+                    }
+                    else if ((IsSubttaskActive(Game.Player.Character, Subtask.EXITING_VEHICLE_OPENING_DOOR_EXITING) || (IsSubttaskActive(Game.Player.Character, Subtask.EXITING_VEHICLE))) && !toggledEnginefromMenu)
+                    {
+                        vehicle.IsEngineRunning = false;
+                    }
+
+                    //vector position auto shutoff func
+                }
+            }
+
+        }
+
+    }
+
 
 
     private void EngineAnimation(object sender, EventArgs e)
@@ -1120,6 +1234,7 @@ public class CarHud : Script
         label_5:
             if (num != 0)
             {
+            Game.DisableControlThisFrame(GTA.Control.VehicleExit);
             Function.Call(Hash.DISABLE_CONTROL_ACTION, (InputArgument)0, (InputArgument)71, (InputArgument)true);
             Game.Player.Character.CurrentVehicle.IsEngineRunning = false;
             Game.Player.Character.CurrentVehicle.IsUndriveable = true;
